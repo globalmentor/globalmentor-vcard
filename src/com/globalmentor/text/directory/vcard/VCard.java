@@ -1,11 +1,11 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import java.net.*;
 import java.util.*;
 import static java.util.Collections.*;
-import com.garretwilson.text.directory.*;
-import static com.garretwilson.text.directory.vcard.VCardConstants.*;
+import static com.globalmentor.text.directory.vcard.VCardConstants.*;
 
+import com.globalmentor.text.directory.*;
 import com.globalmentor.util.*;
 
 /**An object representing a vCard <code>text/directory</code> profile as defined

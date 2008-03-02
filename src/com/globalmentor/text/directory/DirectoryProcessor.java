@@ -1,9 +1,10 @@
-package com.garretwilson.text.directory;
+package com.globalmentor.text.directory;
 
 import java.io.*;
 import java.util.*;
-import static com.garretwilson.text.ABNF.*;
-import static com.garretwilson.text.directory.DirectoryConstants.*;
+
+import static com.globalmentor.text.ABNF.*;
+import static com.globalmentor.text.directory.DirectoryConstants.*;
 
 import com.globalmentor.io.*;
 import com.globalmentor.util.*;

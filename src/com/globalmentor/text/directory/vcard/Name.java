@@ -1,9 +1,9 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import java.util.*;
 
-import static com.garretwilson.text.FormatUtilities.*;
 import static com.globalmentor.java.Objects.*;
+import static com.globalmentor.text.FormatUtilities.*;
 
 import com.globalmentor.util.DefaultLocaleable;
 

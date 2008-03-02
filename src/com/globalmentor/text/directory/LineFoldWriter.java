@@ -1,8 +1,8 @@
-package com.garretwilson.text.directory;
+package com.globalmentor.text.directory;
 
 import java.io.*;
 
-import static com.garretwilson.text.directory.DirectoryConstants.*;
+import static com.globalmentor.text.directory.DirectoryConstants.*;
 
 
 /**Reader that folds lines of type <code>text/directory</code> as defined

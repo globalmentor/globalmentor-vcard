@@ -1,10 +1,11 @@
-package com.garretwilson.text.directory;
+package com.globalmentor.text.directory;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import static com.garretwilson.text.directory.DirectoryConstants.*;
-import static com.garretwilson.text.directory.DirectoryUtilities.*;
+
+import static com.globalmentor.text.directory.DirectoryConstants.*;
+import static com.globalmentor.text.directory.DirectoryUtilities.*;
 
 import com.globalmentor.io.*;
 import com.globalmentor.util.*;

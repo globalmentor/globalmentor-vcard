@@ -1,15 +1,16 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import java.io.*;
 import java.lang.ref.*;
 import java.net.*;
 import java.util.*;
-import com.garretwilson.text.ArgumentSyntaxException;
-import com.garretwilson.text.directory.*;
-import static com.garretwilson.text.directory.vcard.VCardConstants.*;
+
+import static com.globalmentor.text.directory.vcard.VCardConstants.*;
 
 import com.globalmentor.io.*;
 import com.globalmentor.java.*;
+import com.globalmentor.text.ArgumentSyntaxException;
+import com.globalmentor.text.directory.*;
 import com.globalmentor.util.*;
 
 /**Class that can create values for the "VCARD" profile of a

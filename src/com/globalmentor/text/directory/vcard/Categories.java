@@ -1,4 +1,4 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import java.util.*;
 

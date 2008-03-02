@@ -1,11 +1,11 @@
-package com.garretwilson.text.directory;
+package com.globalmentor.text.directory;
 
 import java.io.Reader;
 import java.io.IOException;
 
 import com.globalmentor.io.ParseReader;
 
-import static com.garretwilson.text.directory.DirectoryConstants.*;
+import static com.globalmentor.text.directory.DirectoryConstants.*;
 
 /**Reader that unfolds lines of type <code>text/directory</code> as defined
 	"RFC 2425: A MIME Content-Type for Directory Information".

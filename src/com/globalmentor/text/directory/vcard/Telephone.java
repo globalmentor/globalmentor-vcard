@@ -1,7 +1,7 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import com.garretwilson.itu.*;
-import com.garretwilson.text.ArgumentSyntaxException;
+import com.globalmentor.text.ArgumentSyntaxException;
 
 /**An object representing the "TEL" type of a vCard <code>text/directory</code>
 	profile as defined in <a href="http://www.ietf.org/rfc/rfc2426.txt">RFC 2426</a>,

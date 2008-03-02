@@ -1,12 +1,12 @@
-package com.garretwilson.text.directory.vcard;
+package com.globalmentor.text.directory.vcard;
 
 import java.io.*;
 import java.net.*;
-import com.garretwilson.text.CharacterEncoding;
-import com.garretwilson.text.directory.*;
 import com.globalmentor.io.*;
+import com.globalmentor.text.CharacterEncoding;
+import com.globalmentor.text.directory.*;
 
-import static com.garretwilson.text.directory.vcard.VCardConstants.*;
+import static com.globalmentor.text.directory.vcard.VCardConstants.*;
 
 /**Class for loading and saving a a vCard <code>text/directory</code>
 	profile as defined in <a href="http://www.ietf.org/rfc/rfc2426.txt">RFC 2426</a>,

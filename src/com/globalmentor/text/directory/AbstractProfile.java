@@ -1,4 +1,4 @@
-package com.garretwilson.text.directory;
+package com.globalmentor.text.directory;
 
 import java.util.*;
 
