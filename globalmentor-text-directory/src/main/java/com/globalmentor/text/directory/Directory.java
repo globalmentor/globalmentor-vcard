@@ -158,6 +158,7 @@ public class Directory {
 	 * @param group The group specification, or <code>null</code> if there is no group.
 	 * @param name The name of the information.
 	 * @param localeText The value of the information.
+	 * @return The directory content line.
 	 */
 	public static ContentLine createContentLine(final String profile, final String group, final String name, final LocaledText localeText) {
 		return createContentLine(profile, group, name, localeText, localeText.getLocale()); //create and return a content line from the locale text and the locale
@@ -169,6 +170,7 @@ public class Directory {
 	 * @param group The group specification, or <code>null</code> if there is no group.
 	 * @param name The name of the information.
 	 * @param value The value of the information.
+	 * @return The directory content line.
 	 */
 	public static ContentLine createContentLine(final String profile, final String group, final String name, final Object value) {
 		return createContentLine(profile, group, name, value, null);
@@ -182,6 +184,7 @@ public class Directory {
 	 * @param value The value of the information.
 	 * @param locale The value to give to the language parameter, or <code>null</code> if no language should be specified.
 	 * @see #setLanguageParamValue
+	 * @return The directory content line.
 	 */
 	public static ContentLine createContentLine(final String profile, final String group, final String name, final Object value, final Locale locale) {
 		final ContentLine contentLine = new ContentLine(profile, group, name, value); //create a content line with the value

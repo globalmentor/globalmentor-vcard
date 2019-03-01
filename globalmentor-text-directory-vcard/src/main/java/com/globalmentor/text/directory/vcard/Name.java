@@ -19,8 +19,9 @@ package com.globalmentor.text.directory.vcard;
 import java.io.IOException;
 import java.util.*;
 
+import static java.util.Objects.*;
+
 import static com.globalmentor.java.Conditions.*;
-import static com.globalmentor.java.Objects.*;
 import static com.globalmentor.text.TextFormatter.*;
 
 import com.globalmentor.model.DefaultLocaleable;
@@ -51,7 +52,7 @@ public class Name extends DefaultLocaleable {
 	 * @throws NullPointerException if the provided family names is <code>null</code>.
 	 */
 	public void setFamilyNames(final String... familyNames) {
-		this.familyNames = checkInstance(familyNames, "Family names cannot be null.");
+		this.familyNames = requireNonNull(familyNames, "Family names cannot be null.");
 	}
 
 	/** The given names. */
@@ -73,7 +74,7 @@ public class Name extends DefaultLocaleable {
 	 * @throws NullPointerException if the provided given names is <code>null</code>.
 	 */
 	public void setGivenNames(final String... givenNames) {
-		this.givenNames = checkInstance(givenNames, "Given names cannot be null.");
+		this.givenNames = requireNonNull(givenNames, "Given names cannot be null.");
 	}
 
 	/** The additional names. */
@@ -95,7 +96,7 @@ public class Name extends DefaultLocaleable {
 	 * @throws NullPointerException if the provided additional names is <code>null</code>.
 	 */
 	public void setAdditionalNames(final String... additionalNames) {
-		this.additionalNames = checkInstance(additionalNames, "Additional names cannot be null");
+		this.additionalNames = requireNonNull(additionalNames, "Additional names cannot be null");
 	}
 
 	/** The honorific prefixes. */
@@ -117,7 +118,7 @@ public class Name extends DefaultLocaleable {
 	 * @throws NullPointerException if the provided honorific prefixes is <code>null</code>.
 	 */
 	public void setHonorificPrefixes(final String... honorificPrefixes) {
-		this.honorificPrefixes = checkInstance(honorificPrefixes, "Honorific prefixes cannot be null.");
+		this.honorificPrefixes = requireNonNull(honorificPrefixes, "Honorific prefixes cannot be null.");
 	}
 
 	/** The honorific suffixes. */
@@ -139,7 +140,7 @@ public class Name extends DefaultLocaleable {
 	 * @throws NullPointerException if the provided honorific suffixes is <code>null</code>.
 	 */
 	public void setHonorificSuffixes(final String... honorificSuffixes) {
-		this.honorificSuffixes = checkInstance(honorificSuffixes, "Honorific suffixes cannot be null.");
+		this.honorificSuffixes = requireNonNull(honorificSuffixes, "Honorific suffixes cannot be null.");
 	}
 
 	/**
@@ -166,7 +167,7 @@ public class Name extends DefaultLocaleable {
 	 * @param familyNames The family names.
 	 * @param givenNames The given names.
 	 * @param additionalNames The additional names.
-	 * @param honorificPrefix The honorific prefixes.
+	 * @param honorificPrefixes The honorific prefixes.
 	 * @param honorificSuffixes The honorific suffixes.
 	 */
 	public Name(final String[] familyNames, final String[] givenNames, final String[] additionalNames, final String[] honorificPrefixes,
@@ -179,7 +180,7 @@ public class Name extends DefaultLocaleable {
 	 * @param familyNames The family names.
 	 * @param givenNames The given names.
 	 * @param additionalNames The additional names.
-	 * @param honorificPrefix The honorific prefixes.
+	 * @param honorificPrefixes The honorific prefixes.
 	 * @param honorificSuffixes The honorific suffixes.
 	 * @param locale The locale that represents the language of the text, or <code>null</code> if no language should be indicated.
 	 */

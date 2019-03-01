@@ -48,7 +48,7 @@ public class LineUnfoldReader extends ProcessingBufferedReader {
 	 * removed.
 	 * </p>
 	 * @param newDataBeginIndex The starting index of the newly fetched data.
-	 * @throws if an I/O error occurs.
+	 * @throws IOException if an I/O error occurs.
 	 * @see #getFetchBufferIndex()
 	 */
 	@Override

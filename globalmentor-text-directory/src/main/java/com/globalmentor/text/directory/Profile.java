@@ -25,7 +25,7 @@ import com.globalmentor.model.NameValuePair;
  * href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type for Directory Information".
  * <p>
  * A profile may return <code>null</code> from {@link #getValueType(String, String, String, List)}) if if it wishes to do custom creation in
- * {@link ValueFactory#createValues(String, String, String, List, String, LineUnfoldParseReader)}, providing it has been registered with the particular type
+ * {@link ValueFactory#createValues(String, String, String, List, String, java.io.Reader)}, providing it has been registered with the particular type
  * name.
  * @author Garret Wilson
  */

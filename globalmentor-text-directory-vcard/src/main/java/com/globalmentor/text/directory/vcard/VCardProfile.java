@@ -470,7 +470,6 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	 * Only the value will be serialized, not any previous or subsequent parts of the line or delimiters.
 	 * </p>
 	 * @param address An address object representing the value to serialize.
-	 * @param name An object representing the vCard structured name to serialize.
 	 * @param writer The writer to which the directory information should be written.
 	 * @throws IOException Thrown if there is an error reading the directory.
 	 */

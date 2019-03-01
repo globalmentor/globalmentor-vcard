@@ -356,9 +356,9 @@ public class DirectoryProcessor {
 	 * Whatever delimiter ended the value will be left in the reader.
 	 * </p>
 	 * @param reader The reader that contains the lines of the directory.
-	 * @param The list of parameters; a <code>null</code> value indicates that the name/value pair contained only a name.
 	 * @throws IOException Thrown if there is an error reading the directory.
 	 * @throws ParseIOException Thrown if there is a an error interpreting the directory.
+	 * @return The parameters from the line of content.
 	 * @see NameValuePair
 	 */
 	public List<NameValuePair<String, String>> processParameters(final Reader reader) throws IOException, ParseIOException {
@@ -413,7 +413,7 @@ public class DirectoryProcessor {
 	 * object.</li>
 	 * <li>If no value object was created, a string is returned containing the literal contents of the value.</li>
 	 * </ol>
-	 * @param profile The profile of this content line, or <code>null</code> if there is no profile.
+	 * @param profileName The profile of this content line, or <code>null</code> if there is no profile.
 	 * @param group The group specification, or <code>null</code> if there is no group.
 	 * @param name The name of the information.
 	 * @param paramList The list of parameters; a <code>null</code> value indicates that the name/value pair contained only a name.

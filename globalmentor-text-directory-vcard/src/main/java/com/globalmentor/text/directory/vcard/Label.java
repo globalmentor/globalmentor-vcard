@@ -42,7 +42,7 @@ public class Label extends LocaledText {
 	}
 
 	/**
-	 * Text constructor with no locale specified and default address types of {@value Address#DEFAULT_TYPES}.
+	 * Text constructor with no locale specified and default address types of {@link Address#DEFAULT_TYPES}.
 	 * @param text The non-<code>null</code> text string to represent.
 	 * @throws NullPointerException Thrown if <code>text</code> is <code>null</code>.
 	 */
@@ -51,7 +51,7 @@ public class Label extends LocaledText {
 	}
 
 	/**
-	 * Constructor with default address types of {@value Address#DEFAULT_TYPES}.
+	 * Constructor with default address types of {@link Address#DEFAULT_TYPES}.
 	 * @param localeText The non-<code>null</code> object containing the text and optional locale.
 	 * @throws NullPointerException Thrown if <code>localeText</code> is <code>null</code>.
 	 */
@@ -60,7 +60,7 @@ public class Label extends LocaledText {
 	}
 
 	/**
-	 * Constructor with default address types of {@value Address#DEFAULT_TYPES}.
+	 * Constructor with default address types of {@link Address#DEFAULT_TYPES}.
 	 * @param text The non-<code>null</code> text string to represent.
 	 * @param locale The locale that represents the language of the text, or <code>null</code> if no language should be indicated.
 	 * @throws NullPointerException Thrown if <code>text</code> is <code>null</code>.

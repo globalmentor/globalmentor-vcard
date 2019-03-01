@@ -16,8 +16,8 @@
 
 package com.globalmentor.text.directory.vcard;
 
-import static com.globalmentor.java.Objects.*;
 import static java.util.Collections.*;
+import static java.util.Objects.*;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class Email {
 	}
 
 	/**
-	 * Email address constructor with default telephone type of {@value #DEFAULT_TYPE}.
+	 * Email address constructor with default telephone type of {@link #DEFAULT_TYPE}.
 	 * @param address The email address.
 	 * @throws NullPointerException if the address and/or types is <code>null</code>.
 	 */
@@ -98,7 +98,7 @@ public class Email {
 	 * @throws NullPointerException if the address and/or types is <code>null</code>.
 	 */
 	public Email(final String address, final Set<Type> types, final Locale locale) {
-		this.address = checkInstance(address, "Email address cannot be null.");
+		this.address = requireNonNull(address, "Email address cannot be null.");
 		this.types = Sets.immutableSetOf(types);
 		this.locale = locale;
 	}
@@ -111,6 +111,7 @@ public class Email {
 	/**
 	 * Constructs a string to represent the given email types.
 	 * @param types The email addressing types.
+	 * @return The string representing the given email types.
 	 */
 	public static String getEmailTypeString(final Set<Type> types) {
 		return TextFormatter.formatList(',', types);

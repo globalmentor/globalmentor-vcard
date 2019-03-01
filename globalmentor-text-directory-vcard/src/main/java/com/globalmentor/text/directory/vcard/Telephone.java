@@ -105,7 +105,7 @@ public class Telephone extends TelephoneNumber {
 	 * Constructs a telephone by parsing the given string and assigning a telephone type. Expects the country code to begin with '+' and accepts code field
 	 * delimiters of '-' and ' '.
 	 * <p>
-	 * This constructor uses a default type of {@value Telephone#DEFAULT_TYPE}.
+	 * This constructor uses a default type of {@link Telephone#DEFAULT_TYPE}.
 	 * </p>
 	 * @param string The string to be parsed into a telephone number.
 	 * @throws ArgumentSyntaxException Thrown if the value violates ITU-T E.164.
@@ -134,6 +134,7 @@ public class Telephone extends TelephoneNumber {
 	/**
 	 * Constructs a string to represent the given telephone types.
 	 * @param types The intended use.
+	 * @return The string representing the given telephone types.
 	 */
 	public static String getTypeString(final Set<Type> types) {
 		return formatList(',', types);

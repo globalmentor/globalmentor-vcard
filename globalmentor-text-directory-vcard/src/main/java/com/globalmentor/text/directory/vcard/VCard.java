@@ -574,7 +574,7 @@ public class VCard extends Directory {
 
 	/**
 	 * Sets the application category information about the vCard.
-	 * @param emails The array of categories.
+	 * @param categories The array of categories.
 	 */
 	public void setCategories(final LocaledText... categories) {
 		set(categoryList, categories); //set the new values
@@ -611,7 +611,7 @@ public class VCard extends Directory {
 
 	/**
 	 * Sets the national-language-specific sorting string associated with the vCard.
-	 * @param sortingString The sorting string, or <code>null</code> if there should be no sorting string.
+	 * @param sortString The sorting string, or <code>null</code> if there should be no sorting string.
 	 */
 	public void setSortString(final LocaledText sortString) {
 		this.sortString = sortString;

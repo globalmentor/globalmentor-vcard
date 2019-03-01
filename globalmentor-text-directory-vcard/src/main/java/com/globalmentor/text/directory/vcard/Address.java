@@ -147,7 +147,7 @@ public class Address {
 	*/
 
 	/**
-	 * Constructor with default address types of {@value #DEFAULT_TYPES}.
+	 * Constructor with default address types of {@link #DEFAULT_TYPES}.
 	 * @param postOfficeBox The post office box, or <code>null</code> for no post office box.
 	 * @param extendedAddresses The extended addresses.
 	 * @param streetAddresses The street addresses.
@@ -203,7 +203,7 @@ public class Address {
 	}
 
 	/**
-	 * Single constructor with default address types of {@value #DEFAULT_TYPES}.
+	 * Single constructor with default address types of {@link #DEFAULT_TYPES}.
 	 * @param postOfficeBox The post office box, or <code>null</code> for no post office box.
 	 * @param extendedAddress The extended address, or <code>null</code> for no extended address.
 	 * @param streetAddress The street address, or <code>null</code> for no street address.
@@ -258,6 +258,7 @@ public class Address {
 	/**
 	 * Constructs a string to represent the given delivery address types.
 	 * @param types The delivery address types.
+	 * @return The string representing the given delivery address types.
 	 */
 	public static String getTypeString(final Set<Type> types) {
 		return formatList(',', types);
