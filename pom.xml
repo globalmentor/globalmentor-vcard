@@ -24,8 +24,8 @@
 	</scm>
 
 	<modules>
-		<module>text-directory</module>
-		<module>text-directory-vcard</module>
+		<module>directory</module>
+		<module>vcard</module>
 		<module>vcardcat</module>
 	</modules>
 
