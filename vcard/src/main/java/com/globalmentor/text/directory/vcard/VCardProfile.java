@@ -130,18 +130,18 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 			final String valueType, final Reader reader) throws IOException, ParseIOException {
 		//see if we recognize the value type
 		if(PHONE_NUMBER_VALUE_TYPE.equalsIgnoreCase(valueType)) { //phone-number
-			return new Object[] { processPhoneNumberValue(reader, paramList) }; //process the phone number value type			
+			return new Object[] {processPhoneNumberValue(reader, paramList)}; //process the phone number value type			
 		}
 		//see if we recognize the type name		
 		//identification types
 		if(N_TYPE.equalsIgnoreCase(name)) { //N
-			return new Object[] { processNValue(reader, paramList) }; //process the N value
+			return new Object[] {processNValue(reader, paramList)}; //process the N value
 		} else if(BDAY_TYPE.equalsIgnoreCase(name)) { //BDAY
-			return new Object[] { AbstractISODateTime.valueOfLiberal(reach(reader, CR)) }; //a birthday should normally be a date, but sometimes it could be a date-time as well
+			return new Object[] {AbstractISODateTime.valueOfLiberal(readUntilRequired(reader, CR))}; //a birthday should normally be a date, but sometimes it could be a date-time as well
 		}
 		//delivery addressing types
 		else if(ADR_TYPE.equalsIgnoreCase(name)) { //ADR
-			return new Object[] { processADRValue(reader, paramList) }; //process the ADR value
+			return new Object[] {processADRValue(reader, paramList)}; //process the ADR value
 		} else if(LABEL_TYPE.equalsIgnoreCase(name)) { //LABEL
 			final LocaledText[] localeTexts = PredefinedProfile.processTextValueList(reader, paramList); //process the text values
 
@@ -165,7 +165,7 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 		}
 		//organizational types
 		else if(ORG_TYPE.equalsIgnoreCase(name)) { //ORG
-			return new Object[] { processORGValue(reader, paramList) }; //process the ORG value
+			return new Object[] {processORGValue(reader, paramList)}; //process the ORG value
 		}
 		return null; //show that we can't create a value
 	}
@@ -239,10 +239,10 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	 * @throws IOException Thrown if there is an error reading the directory.
 	 * @throws ParseIOException Thrown if there is a an error interpreting the directory.
 	 */
-	public static Telephone processPhoneNumberValue(final Reader reader, final List<NameValuePair<String, String>> paramList) throws IOException,
-			ParseIOException {
+	public static Telephone processPhoneNumberValue(final Reader reader, final List<NameValuePair<String, String>> paramList)
+			throws IOException, ParseIOException {
 		final Locale locale = getLanguageParamValue(paramList); //get the language, if there is one
-		final String telephoneNumberString = reach(reader, CR); //read the string representing the telephone number
+		final String telephoneNumberString = readUntilRequired(reader, CR); //read the string representing the telephone number
 		final Set<Telephone.Type> telephoneTypes = EnumSet.noneOf(Telephone.Type.class); //we'll determine the telephone types
 		List<String> typeStrings = getParamValues(paramList, TYPE_PARAM_NAME); //get the telephone types specified
 		//some VCard producers, such as Nokia, provide types as bare parameter names instead of in the form TYPE=XXX
@@ -303,7 +303,7 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 		do {
 			final String[] values = processStructuredTextFieldValue(reader); //process this field
 			fieldList.add(values); //add the strings of the field to our list			
-			delimiter = peek(reader); //see what character is next
+			delimiter = peekRequired(reader); //see what character is next
 			if(delimiter != CR) //if we haven't reached the end of the value
 				reader.skip(1); //skip the delimiter
 		} while(delimiter == STRUCTURED_TEXT_VALUE_DELIMITER); //keep getting fields while we are still running into structured text value separators
@@ -317,7 +317,7 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	 * indicate line breaks in structured text values. This value will be converted to a standard '\n' newline character.
 	 * </p>
 	 */
-	protected static final Characters STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS = new Characters(TEXT_ESCAPE_CHAR, STRUCTURED_TEXT_VALUE_DELIMITER,
+	protected static final Characters STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS = Characters.of(TEXT_ESCAPE_CHAR, STRUCTURED_TEXT_VALUE_DELIMITER,
 			VALUE_SEPARATOR_CHAR, CR, LINE_SEPARATOR_CHAR);
 
 	/**
@@ -338,9 +338,9 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 		final StringBuilder stringBuilder = new StringBuilder(); //create a string builder to hold whatever string we're processing
 		char delimiter; //we'll store the last delimiter peeked		
 		do {
-			stringBuilder.append(reach(reader, STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS)); //read all value characters until we find a delimiter, and add the value so far to the string buffer
+			stringBuilder.append(readUntilRequired(reader, STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS)); //read all value characters until we find a delimiter, and add the value so far to the string buffer
 			//TODO del when works			valueList.add(reader.readStringUntilChar(STRUCTURED_TEXT_VALUE_DELIMITER_CHARS));	//read all value characters until we find a delimiter, and add that value to the list
-			delimiter = peek(reader); //see what the delimiter will be
+			delimiter = peekRequired(reader); //see what the delimiter will be
 			switch(delimiter) { //see which delimiter we found
 				case VALUE_SEPARATOR_CHAR: //if this is the character separating multiple values (',')
 					valueList.add(stringBuilder.toString()); //add the value we collected
@@ -350,7 +350,7 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 				case TEXT_ESCAPE_CHAR: //if this is an escape character ('\\')
 				{
 					reader.skip(1); //skip the delimiter
-					final char escapedChar = readCharacter(reader); //read the character after the escape character
+					final char escapedChar = readRequired(reader); //read the character after the escape character
 					switch(escapedChar) { //see what character comes after this one
 						case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
 						case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
@@ -362,8 +362,8 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 							stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
 							break;
 						default: //if something else was escaped, we don't recognize it
-							throw new ParseUnexpectedDataException(new Characters('\\', ';', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR,
-									TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar, reader); //show that we didn't expect this character here				
+							throw new ParseUnexpectedDataException(reader,
+									Characters.of('\\', ';', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
 					}
 				}
 					break;
@@ -375,8 +375,8 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 					stringBuilder.append('\n'); //replace the character with a true line break, which according to VCard 3.0 should have been escaped (or in VCard 2.1 the entire value should have been encoded)
 					break;
 				default: //if we peeked anything else (there shouldn't be anything else unless there is a logic error)					
-					throw new AssertionError("The only possible values should have been " + STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS + "; found "
-							+ Characters.getLabel(delimiter));
+					throw new AssertionError(
+							"The only possible values should have been " + STRUCTURED_TEXT_VALUE_DELIMITER_CHARACTERS + "; found " + Characters.getLabel(delimiter));
 			}
 		} while(delimiter != STRUCTURED_TEXT_VALUE_DELIMITER && delimiter != CR); //keep collecting parts of the string until we encounter a ';' or a CR
 		valueList.add(stringBuilder.toString()); //add the value we collected
@@ -456,8 +456,8 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	 */
 	public static void serializeNValue(final Name name, final Writer writer) throws IOException {
 		//place the field arrays into an array
-		final String[][] n = new String[][] { name.getFamilyNames(), name.getGivenNames(), name.getAdditionalNames(), name.getHonorificPrefixes(),
-				name.getHonorificSuffixes() };
+		final String[][] n = new String[][] {name.getFamilyNames(), name.getGivenNames(), name.getAdditionalNames(), name.getHonorificPrefixes(),
+				name.getHonorificSuffixes()};
 		serializeStructuredTextValue(n, writer); //serialize the value
 	}
 
@@ -475,12 +475,12 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	 */
 	public static void serializeADRValue(final Address address, final Writer writer) throws IOException {
 		//place the field arrays into an array
-		final String[][] adr = new String[][] { new String[] { address.getPostOfficeBox() != null ? address.getPostOfficeBox() : "" },
+		final String[][] adr = new String[][] {new String[] {address.getPostOfficeBox() != null ? address.getPostOfficeBox() : ""},
 				address.getExtendedAddresses().toArray(new String[address.getExtendedAddresses().size()]),
 				address.getStreetAddresses().toArray(new String[address.getStreetAddresses().size()]),
-				new String[] { address.getLocality() != null ? address.getLocality() : "" }, new String[] { address.getRegion() != null ? address.getRegion() : "" },
-				new String[] { address.getPostalCode() != null ? address.getPostalCode() : "" },
-				new String[] { address.getCountryName() != null ? address.getCountryName() : "" } };
+				new String[] {address.getLocality() != null ? address.getLocality() : ""}, new String[] {address.getRegion() != null ? address.getRegion() : ""},
+				new String[] {address.getPostalCode() != null ? address.getPostalCode() : ""},
+				new String[] {address.getCountryName() != null ? address.getCountryName() : ""}};
 		serializeStructuredTextValue(adr, writer); //serialize the value
 	}
 
@@ -496,7 +496,7 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	public static void serializeORGValue(final LocaledText[] org, final Writer writer) throws IOException {
 		final String[][] orgFields = new String[org.length][]; //create an array of string arrays
 		for(int i = org.length - 1; i >= 0; --i) { //look at each of the org components
-			orgFields[i] = new String[] { org[i].getText() }; //store the text of this org component in an array representing this field
+			orgFields[i] = new String[] {org[i].getText()}; //store the text of this org component in an array representing this field
 		}
 		serializeStructuredTextValue(orgFields, writer); //serialize the value
 	}
@@ -527,10 +527,10 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 	}
 
 	/** The characters that must be escaped in structured text: '\n', '\\', and ','. */
-	private static final char[] STRUCTURED_TEXT_MATCH_CHARS = new char[] { '\n', '\\', ';', ',' };
+	private static final char[] STRUCTURED_TEXT_MATCH_CHARS = new char[] {'\n', '\\', ';', ','};
 
 	/** The strings to replace the characters to be escaped in structured text. */
-	private static final String[] STRUCTURED_TEXT_REPLACEMENT_STRINGS = new String[] { "\\n", "\\", "\\;", "\\," };
+	private static final String[] STRUCTURED_TEXT_REPLACEMENT_STRINGS = new String[] {"\\n", "\\", "\\;", "\\,"};
 
 	/**
 	 * Serializes a structured text field value.

@@ -13,6 +13,12 @@
 	<name>vCardCat</name>
 	<description>GlobalMentor vCard concatenation program.</description>
 
+	<properties>
+		<maven.compiler.release>11</maven.compiler.release>
+		<exe.main.class>com.globalmentor.text.directory.vcard.cat.VCardCat</exe.main.class>
+		<exe.filename>vcardcat.exe</exe.filename>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.globalmentor</groupId>
@@ -23,5 +29,36 @@
 			<groupId>com.globalmentor</groupId>
 			<artifactId>globalmentor-text-directory-vcard</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>io.clogr</groupId>
+			<artifactId>clogr</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.clogr</groupId>
+			<artifactId>clogr-logback-provider</artifactId>
+		</dependency>
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>

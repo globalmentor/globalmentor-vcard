@@ -29,8 +29,8 @@ import com.globalmentor.model.LocaledText;
 import com.globalmentor.model.NameValuePair;
 
 /**
- * Class that can process a directory of type <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>,
- * "A MIME Content-Type for Directory Information".
+ * Class that can process a directory of type <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME
+ * Content-Type for Directory Information".
  * <p>
  * This processor makes the following decisions for ambiguities in the specification:
  * </p>
@@ -168,7 +168,7 @@ public class DirectoryProcessor {
 	/**
 	 * The delimiter characters separating the main components of a content line with no group provided (';', ':', CR, and LF).
 	 */
-	protected static final Characters GROUPLESS_CONTENT_LINE_DELIMITER_CHARACTERS = new Characters(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR, CR, LF);
+	protected static final Characters GROUPLESS_CONTENT_LINE_DELIMITER_CHARACTERS = Characters.of(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR, CR, LF);
 
 	/**
 	 * The delimiter characters separating the main components of a content line ('.', ';', ':', CR, and LF).
@@ -282,7 +282,7 @@ public class DirectoryProcessor {
 		String name = null; //we'll store the name here
 		List<NameValuePair<String, String>> paramList = null; //we'll store parameters here, if we have any
 
-		String token = reachEnd(reader, CONTENT_LINE_DELIMITER_CHARACTERS); //read the next line token; don't throw an exception if the end of the file is reached, because this could be an empty line
+		String token = readUntil(reader, CONTENT_LINE_DELIMITER_CHARACTERS); //read the next line token; don't throw an exception if the end of the file is reached, because this could be an empty line
 		final int c = reader.read(); //get the delimiter character we encountered
 		if(c < 0) { //if we reached the end of the file
 			if(token.trim().length() > 0) { //if there is non-whitespace content before the end of the line, but none of the other delimiters we expect, there's a syntax error in the line
@@ -300,8 +300,8 @@ public class DirectoryProcessor {
 			//TODO check the syntax of the group
 			group = token; //save the group we read
 			//TODO del Log.trace("found group: ", group);
-			token = reach(reader, GROUPLESS_CONTENT_LINE_DELIMITER_CHARACTERS); //read the next line token after the group, which should be the name
-			character = readCharacter(reader); //get the delimiter character we encountered, and fall through to checking the name
+			token = readUntilRequired(reader, GROUPLESS_CONTENT_LINE_DELIMITER_CHARACTERS); //read the next line token after the group, which should be the name
+			character = readRequired(reader); //get the delimiter character we encountered, and fall through to checking the name
 		}
 		switch(character) { //see which delimiter character we encountered
 			case PARAM_SEPARATOR_CHAR: //if we just read a parameter separator
@@ -326,13 +326,13 @@ public class DirectoryProcessor {
 				return contentLines; //return the array of content lines we created and filled
 			case CR: //if we just read a carriage return
 				if(token.trim().length() > 0) { //if there is content before the CRLF, but none of the other delimiters we expect, there's a syntax error in the line
-					throw new ParseUnexpectedDataException(new Characters(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR), character, reader); //show that we didn't expect this character here
+					throw new ParseUnexpectedDataException(reader, Characters.of(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR), character); //show that we didn't expect this character here
 				}
 				check(reader, LF); //there should always be an LF after a CR
 				return new ContentLine[0]; //return an empty content line indicator
 			case LF: //if we see an LF before a CR
 			default: //if we read anything else (there shouldn't be anything else unless there is a logic error)					
-				throw new ParseUnexpectedDataException(new Characters(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR), character, reader); //show that we didn't expect this character here
+				throw new ParseUnexpectedDataException(reader, Characters.of(PARAM_SEPARATOR_CHAR, NAME_VALUE_SEPARATOR_CHAR), character); //show that we didn't expect this character here
 		}
 	}
 
@@ -340,14 +340,14 @@ public class DirectoryProcessor {
 	 * After reading the parameter name, we expect either a parameter name-value separator ('=') indicating a value, the parameter separator (';') indicating more
 	 * parameters, or the line name/value separator (':'), indicating we've finished parameters.
 	 */
-	protected static final Characters PARAM_NAME_DELIMITER_CHARACTERS = new Characters(PARAM_NAME_VALUE_SEPARATOR_CHAR, PARAM_SEPARATOR_CHAR,
+	protected static final Characters PARAM_NAME_DELIMITER_CHARACTERS = Characters.of(PARAM_NAME_VALUE_SEPARATOR_CHAR, PARAM_SEPARATOR_CHAR,
 			NAME_VALUE_SEPARATOR_CHAR);
 
 	/**
 	 * After reading the parameter value, we expect either a parameter separator (';') the parameter value separator (',') indicating more values, or the line
 	 * name/value separator (':'), indicating we've finished parameters.
 	 */
-	protected static final Characters PARAM_VALUE_DELIMITER_CHARACTERS = new Characters(PARAM_SEPARATOR_CHAR, PARAM_VALUE_SEPARATOR_CHAR,
+	protected static final Characters PARAM_VALUE_DELIMITER_CHARACTERS = Characters.of(PARAM_SEPARATOR_CHAR, PARAM_VALUE_SEPARATOR_CHAR,
 			NAME_VALUE_SEPARATOR_CHAR);
 
 	/**
@@ -366,25 +366,25 @@ public class DirectoryProcessor {
 		char nextCharacter; //we'll store the last peeked delimiter here each time in the loop
 		do { //read each parameter
 			//read the parameter name
-			final String paramName = reach(reader, PARAM_NAME_DELIMITER_CHARACTERS); //get the parameter name, which is usually everything up to the '=' character
+			final String paramName = readUntilRequired(reader, PARAM_NAME_DELIMITER_CHARACTERS); //get the parameter name, which is usually everything up to the '=' character
 			//TODO check the param name for validity
-			nextCharacter = peek(reader); //see what delimiter will come next
+			nextCharacter = peekRequired(reader); //see what delimiter will come next
 			if(nextCharacter == PARAM_NAME_VALUE_SEPARATOR_CHAR) { //if there is at least one value waiting
 				do { //read the parameter value(s)
 					reader.skip(1); //skip the delimiter that got us here
 					final String paramValue; //we'll read the value and store it here
-					switch(peek(reader)) { //see what character is first in the value
+					switch(peekRequired(reader)) { //see what character is first in the value
 						case DQUOTE: //if the string starts with a quote
-							paramValue = readDelimited(reader, DQUOTE, DQUOTE); //read the value within the quotes 
+							paramValue = readEnclosedRequired(reader, DQUOTE, DQUOTE); //read the value within the quotes 
 							break;
 						default: //if the string doesn't end with a quote
-							paramValue = reach(reader, PARAM_VALUE_DELIMITER_CHARACTERS); //read everything until the end of this parameter
+							paramValue = readUntilRequired(reader, PARAM_VALUE_DELIMITER_CHARACTERS); //read everything until the end of this parameter
 							break;
 					}
 					//			TODO del Log.trace("found param value: ", paramValue);
 					//TODO check the parameter value, here
 					paramList.add(new NameValuePair<String, String>(paramName, paramValue)); //add this name/value pair to our list of parameters
-					nextCharacter = peek(reader); //see what delimiter will come next
+					nextCharacter = peekRequired(reader); //see what delimiter will come next
 				} while(nextCharacter == PARAM_VALUE_SEPARATOR_CHAR); //keep getting parameter values while there are more parameter value separators
 			} else { //if there is no '='
 				paramList.add(new NameValuePair<String, String>(paramName, null)); //add a name/value pair with null as the value
@@ -405,7 +405,8 @@ public class DirectoryProcessor {
 	 * When attempting to find a <code>ValueFactory</code> to process a given value, an attempt is made to locate a value factory in this order:
 	 * </p>
 	 * <ol>
-	 * <li>If no explicit value type is given and a profile name is known, the <code>Profile</code> registered for that profile, if any, is asked for the type.</li>
+	 * <li>If no explicit value type is given and a profile name is known, the <code>Profile</code> registered for that profile, if any, is asked for the
+	 * type.</li>
 	 * <li>If no explicit value type is still not known, the predefined profile is asked for the predefined type name.</li>
 	 * <li>If a profile name is known and the <code>Profile</code> registered with the profile, if any, implements <code>ValueFactory</code>, it is asked to
 	 * create the value object.</li>
@@ -446,8 +447,8 @@ public class DirectoryProcessor {
 			}
 		}
 		if(objects == null) { //if no objects were created
-			final String valueString = reach(reader, CR); //everything before the carriage return will constitute the value
-			objects = new String[] { valueString }; //put the single value string in an array of strings and use that for the value objects
+			final String valueString = readUntilRequired(reader, CR); //everything before the carriage return will constitute the value
+			objects = new String[] {valueString}; //put the single value string in an array of strings and use that for the value objects
 		}
 		return objects; //return the value objects we processed
 	}

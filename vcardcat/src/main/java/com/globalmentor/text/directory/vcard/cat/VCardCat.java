@@ -16,105 +16,83 @@
 
 package com.globalmentor.text.directory.vcard.cat;
 
-import static com.globalmentor.application.CommandLineArguments.*;
-import static com.globalmentor.java.Characters.*;
-
 import java.io.*;
-import java.net.URI;
 
-import com.globalmentor.application.AbstractApplication;
+import javax.annotation.*;
+
+import com.globalmentor.application.*;
 import com.globalmentor.io.Files;
-import com.globalmentor.lex.Identifier;
-import com.globalmentor.log.Log;
 import com.globalmentor.text.directory.vcard.*;
 
+import io.clogr.Clogged;
+import picocli.CommandLine.*;
+
 /**
- * Application and routines for concatenating the contents of one or more VCards into a single output file.
+ * Application and routines for concatenating the contents of one or more VCards into a single output.
  * <p>
  * One benefit of concatenating, if even for a single input file, is that the file contents will be normalized, compensating for variations in the output of
  * various producers.
  * </p>
  * @author Garret Wilson
  */
-public class VCardCat extends AbstractApplication {
+@Command(name = "vcardcat", description = "Concatenates the contents of one or more vCards into a single output.", versionProvider = VCardCat.MetadataProvider.class, mixinStandardHelpOptions = true)
+public class VCardCat extends BaseCliApplication implements Clogged {
 
-	/** The application URI. */
-	public static final URI APPLICATION_URI = URI.create("http://globalmentor.com/software/vcardcat");
+	@Option(names = {"--out", "-o"})
+	private File outputFile;
 
-	/** The application title. */
-	public static final String TITLE = "VCardCat" + TRADE_MARK_SIGN_CHAR;
-
-	/** The application copyright. */
-	public static final String COPYRIGHT = "Copyright " + COPYRIGHT_SIGN + " 2011 GlobalMentor, Inc. All Rights Reserved."; //TODO i18n
-
-	/** The version of the application. */
-	public static final String VERSION = "1.0-SNAPSHOT build 2010-04-23";
-
-	/** Application command-line parameters. */
-	public enum Parameter implements Identifier {
-		/** The input file or directory. */
-		INPUT,
-		/** The output file. */
-		OUTPUT;
-	}
+	@Parameters(paramLabel = "<file>", description = "One or more input files, or a single file glob.", arity = "1..*")
+	private File[] inputFiles;
 
 	/**
-	 * Argument constructor.
+	 * Constructor.
 	 * @param args The command line arguments.
 	 */
-	public VCardCat(final String[] args) {
-		super(APPLICATION_URI, TITLE, args); //construct the parent class
-		//TODO set version somehow
-		//TODO set the copyright DCMI.setRights(this, COPYRIGHT); //set the application copyright
+	public VCardCat(@Nonnull final String[] args) {
+		super(args);
 	}
 
 	/**
-	 * The main application method.
-	 * @return The application status.
+	 * Main program entry method.
+	 * @param args Program arguments.
 	 */
-	public int main() {
-		final String[] args = getArgs(); //get the arguments
-		final String inputString = getOption(args, Parameter.INPUT); //get the input parameter
-		if(inputString == null) { //if the source parameter is missing
-			System.out.println(TITLE);
-			System.out.println(VERSION);
-			System.out.println(COPYRIGHT);
-			System.out.println("Usage: VCardCat --input <file[wildcard]> [--output file]");
-			return 0;
-		}
-		final String outputString = getOption(args, Parameter.OUTPUT); //get the output parameter, if any
+	public static void main(@Nonnull final String[] args) {
+		Application.start(new VCardCat(args));
+	}
+
+	@Override
+	public void run() {
 		try {
-			final OutputStream outputStream = outputString != null ? new BufferedOutputStream(new FileOutputStream(outputString)) : System.out;
+			final OutputStream outputStream = outputFile != null ? new BufferedOutputStream(new FileOutputStream(outputFile)) : System.out;
 			try {
 				final VCardIO vcardIO = new VCardIO();
 				vcardIO.setSerializationSingleValueNames(VCard.NOTE_TYPE); //combine notes TODO make this optional
-				for(final File file : Files.listWildcards(new File(inputString))) { //look at all the specified files
+				final File[] files = inputFiles.length == 1 ? Files.listWildcards(inputFiles[0]) : inputFiles;
+				for(final File file : files) { //look at all the specified files
 					try {
 						//read the card from resources
 						final VCard vcard = Files.read(file, vcardIO); //read this VCard
 						vcardIO.write(outputStream, null, vcard); //write the VCard to the output
 					} catch(final Throwable throwable) {
-						Log.error("Error processing VCard file", file, throwable);
-						return 1;
+						getLogger().error("Error processing VCard file {}.", file, throwable);
+						exit(1); //TODO improve base application to allow this to be returned
 					}
 				}
 			} finally {
-				if(outputString != null) { //if we opened a special file
+				if(outputFile != null) { //if we opened a special file
 					outputStream.close(); //close the file
 				}
 			}
 		} catch(final Throwable throwable) {
-			Log.error(throwable);
-			return 1;
+			getLogger().error(throwable.getMessage(), throwable);
+			exit(1); //TODO improve base application to allow this to be returned
 		}
-		return 0;
 	}
 
-	/**
-	 * The main routine that starts the application.
-	 * @param args The command line arguments.
-	 */
-	public static void main(final String[] args) {
-		run(new VCardCat(args), args); //start a new application
+	/** Strategy for providing version and other information from the configuration. */
+	static class MetadataProvider extends AbstractMetadataProvider {
+		public MetadataProvider() {
+			super(VCardCat.class);
+		}
 	}
 }

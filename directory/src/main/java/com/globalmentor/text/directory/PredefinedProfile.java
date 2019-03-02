@@ -31,11 +31,10 @@ import com.globalmentor.iso.datetime.ISODateTime;
 import com.globalmentor.iso.datetime.ISOTime;
 import com.globalmentor.java.Characters;
 import com.globalmentor.model.*;
-import com.globalmentor.util.Base64;
 
 /**
- * Profile for predefined types of a <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>,
- * "A MIME Content-Type for Directory Information".
+ * Profile for predefined types of a <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type
+ * for Directory Information".
  * <p>
  * The predefined profile knows how to process the standard directory value types: {@value Directory#URI_VALUE_TYPE}, {@value Directory#TEXT_VALUE_TYPE},
  * {@value Directory#DATE_VALUE_TYPE}, {@value Directory#TIME_VALUE_TYPE}, {@value Directory#DATE_TIME_VALUE_TYPE}, {@value Directory#INTEGER_VALUE_TYPE},
@@ -107,13 +106,13 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 		if(TEXT_VALUE_TYPE.equalsIgnoreCase(valueType)) { //text
 			return processTextValueList(reader, paramList); //process the text value
 		} else if(URI_VALUE_TYPE.equalsIgnoreCase(valueType)) { //uri
-			return new Object[] { processURIValue(reader) }; //process the URI value type			
+			return new Object[] {processURIValue(reader)}; //process the URI value type			
 		} else if(DATE_VALUE_TYPE.equalsIgnoreCase(valueType)) { //date
-			return new Object[] { ISODate.valueOfLiberal(reach(reader, CR)) };
+			return new Object[] {ISODate.valueOfLiberal(readUntilRequired(reader, CR))};
 		} else if(TIME_VALUE_TYPE.equalsIgnoreCase(valueType)) { //time
-			return new Object[] { ISOTime.valueOf(reach(reader, CR)) };
+			return new Object[] {ISOTime.valueOf(readUntilRequired(reader, CR))};
 		} else if(DATE_TIME_VALUE_TYPE.equalsIgnoreCase(valueType)) { //date-time
-			return new Object[] { ISODateTime.valueOfLiberal(reach(reader, CR)) };
+			return new Object[] {ISODateTime.valueOfLiberal(readUntilRequired(reader, CR))};
 		}
 		return null; //show that we can't create a value
 	}
@@ -132,8 +131,8 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 	 * @throws IOException Thrown if there is an error reading the directory.
 	 * @throws ParseIOException Thrown if there is a an error interpreting the directory.
 	 */
-	public static LocaledText[] processTextValueList(final Reader reader, final List<NameValuePair<String, String>> paramList) throws IOException,
-			ParseIOException {
+	public static LocaledText[] processTextValueList(final Reader reader, final List<NameValuePair<String, String>> paramList)
+			throws IOException, ParseIOException {
 		final Locale locale = getLanguageParamValue(paramList); //get the language, if any
 		final List<LocaledText> localeTextList = new ArrayList<LocaledText>(); //create a new list to hold the locale text objects we find
 		char delimiter; //we'll store the last delimiter peeked		
@@ -141,14 +140,14 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 			final String string = processTextValue(reader, paramList); //read a string
 			//		TODO del Log.trace("read text string: ", string);	//TODO del
 			localeTextList.add(new LocaledText(string, locale)); //add the text to our list			
-			delimiter = peek(reader); //see what character is next
+			delimiter = peekRequired(reader); //see what character is next
 			//		TODO del Log.trace("next delimiter: ", delimiter);	//TODO del			
 		} while(delimiter == VALUE_SEPARATOR_CHAR); //keep getting strings while we are still running into value separators
 		return localeTextList.toArray(new LocaledText[localeTextList.size()]); //convert the list of locale text objects to an array and return the array
 	}
 
 	/** The delimiters that can divide a text value: '\\' ',' and CR. */
-	protected static final Characters TEXT_VALUE_DELIMITER_CHARACTERS = new Characters(TEXT_ESCAPE_CHAR, VALUE_SEPARATOR_CHAR, CR);
+	protected static final Characters TEXT_VALUE_DELIMITER_CHARACTERS = Characters.of(TEXT_ESCAPE_CHAR, VALUE_SEPARATOR_CHAR, CR);
 
 	/**
 	 * Processes a single text value.
@@ -171,23 +170,23 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 		//check for the non-standard base64 encoding used by producers such as Nokia
 		final String encoding = getParamValue(paramList, ENCODING_PARAM_NAME); //see if an encoding is indicated
 		if(B_ENCODING_TYPE.equalsIgnoreCase(encoding) || BASE64_ENCODING_TYPE.equalsIgnoreCase(encoding)) { //if the text is encoded as binary (Nokia does this, for unknown reasons)
-			final String base64String = reach(reader, CR); //read the text TODO could some implementations have multiple encoded values, separated by commas?
-			final byte[] bytes = Base64.decode(base64String); //decode the text into bytes
+			final String base64String = readUntilRequired(reader, CR); //read the text TODO could some implementations have multiple encoded values, separated by commas?
+			final byte[] bytes = Base64.getDecoder().decode(base64String); //decode the text into bytes
 			final String encodedString = new String(bytes, UTF_8); //hope that the bytes represent UTF-8; using base64 for text is non-standard and undocumented
 			reader = new StringReader(encodedString + CR); //replace the reader with the new, decoded content, adding a CR to mimic the original data
-			delimiters = new Characters(CR); //because the text was Base64-encoded, it won't separate values using commas or escape characters---that was the purpose of the Base64 encoding
+			delimiters = Characters.of(CR); //because the text was Base64-encoded, it won't separate values using commas or escape characters---that was the purpose of the Base64 encoding
 		}
 		final StringBuilder stringBuilder = new StringBuilder(); //create a string builder to hold whatever string we're processing
 		char delimiter; //we'll store the last delimiter peeked		
 		do {
 			//		TODO del Log.trace("string buffer so far: ", stringBuffer);	//TODO del			
-			stringBuilder.append(reach(reader, delimiters)); //read all undelimited characters until we find a delimiter
-			delimiter = peek(reader); //see what the delimiter will be
+			stringBuilder.append(readUntilRequired(reader, delimiters)); //read all undelimited characters until we find a delimiter
+			delimiter = peekRequired(reader); //see what the delimiter will be
 			switch(delimiter) { //see which delimiter we found
 				case TEXT_ESCAPE_CHAR: //if this is an escape character ('\\')
 				{
 					reader.skip(1); //skip the delimiter
-					final char escapedChar = readCharacter(reader); //read the character after the escape character
+					final char escapedChar = readRequired(reader); //read the character after the escape character
 					switch(escapedChar) { //see what character comes after this one
 						case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
 						case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
@@ -199,8 +198,8 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 							stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
 							break;
 						default: //if something else was escaped, we don't recognize it
-							throw new ParseUnexpectedDataException(new Characters('\\', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR),
-									escapedChar, reader); //show that we didn't expect this character here				
+							throw new ParseUnexpectedDataException(reader,
+									Characters.of('\\', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
 					}
 				}
 					break;
@@ -208,7 +207,8 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 				case CR: //if we just peeked a carriage return
 					break; //don't do anything---we'll just collect our characters and leave
 				default: //if we peeked anything else (there shouldn't be anything else unless there is a logic error)
-					throw new AssertionError("The only possible values should have been " + TEXT_VALUE_DELIMITER_CHARACTERS + "; found " + Characters.getLabel(delimiter));
+					throw new AssertionError(
+							"The only possible values should have been " + TEXT_VALUE_DELIMITER_CHARACTERS + "; found " + Characters.getLabel(delimiter));
 			}
 		} while(delimiter != VALUE_SEPARATOR_CHAR && delimiter != CR); //keep collecting parts of the string until we encounter a ',' or a CR
 		//TODO check the text value
@@ -227,7 +227,7 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 	 * @throws ParseIOException Thrown if there is a an error interpreting the directory.
 	 */
 	public static URI processURIValue(final Reader reader) throws IOException, ParseIOException {
-		final String uriString = reach(reader, CR); //read the string representing the URI
+		final String uriString = readUntilRequired(reader, CR); //read the string representing the URI
 		try {
 			return new URI(uriString); //create a URI
 		} catch(URISyntaxException uriSyntaxException) { //if the URI was not syntactically correct

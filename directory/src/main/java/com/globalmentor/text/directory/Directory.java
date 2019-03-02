@@ -27,8 +27,8 @@ import com.globalmentor.model.*;
 import com.globalmentor.net.ContentType;
 
 /**
- * A directory of type <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>,
- * "A MIME Content-Type for Directory Information".
+ * A directory of type <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type for Directory
+ * Information".
  * @author Garret Wilson
  */
 public class Directory {
@@ -39,7 +39,7 @@ public class Directory {
 	/**
 	 * Whitespace as defined by RFC 2425: "space, ASCII decimal 32, or horizontal tab, ASCII decimal 9".
 	 */
-	public static final Characters WHITESPACE_CHARACTERS = new Characters((char)32, (char)9);
+	public static final Characters WHITESPACE_CHARACTERS = Characters.of((char)32, (char)9);
 
 	/** The recommended character length greater than which a line should be folded. */
 	public static final int LONG_LINE_LENGTH = 75;
@@ -301,7 +301,7 @@ public class Directory {
 	public static Locale getLanguageParamValue(final List<NameValuePair<String, String>> paramList) {
 		final String languageValue = getParamValue(paramList, LANGUAGE_PARAM_NAME); //get the first language parameter
 		return languageValue != null && languageValue.trim().length() > 0 //if there is a language and it isn't just whitespace 
-		? Locales.createLocale(languageValue.trim()) //create a locale from the language value
+				? Locales.createLocale(languageValue.trim()) //create a locale from the language value
 				: null; //show that there was no language
 	}
 
@@ -320,11 +320,11 @@ public class Directory {
 	 * The characters that must be escaped in text: CR, LF, '\\', and ','. (Note that CRLF runs should first be replaced with a single LF to prevent duplicate
 	 * linefeeds.
 	 */
-	protected static final char[] TEXT_MATCH_CHARS = new char[] { LF, TEXT_ESCAPE_CHAR, VALUE_SEPARATOR_CHAR, CR };
+	protected static final char[] TEXT_MATCH_CHARS = new char[] {LF, TEXT_ESCAPE_CHAR, VALUE_SEPARATOR_CHAR, CR};
 
 	/** The strings to replace the characters to be escaped in text. */
-	protected static final String[] TEXT_REPLACEMENT_STRINGS = new String[] { TEXT_ESCAPE_STRING + TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR,
-			TEXT_ESCAPE_STRING + TEXT_ESCAPE_CHAR, TEXT_ESCAPE_STRING + VALUE_SEPARATOR_CHAR, TEXT_ESCAPE_STRING + TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR };
+	protected static final String[] TEXT_REPLACEMENT_STRINGS = new String[] {TEXT_ESCAPE_STRING + TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR,
+			TEXT_ESCAPE_STRING + TEXT_ESCAPE_CHAR, TEXT_ESCAPE_STRING + VALUE_SEPARATOR_CHAR, TEXT_ESCAPE_STRING + TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR};
 
 	/**
 	 * Encodes a text value.

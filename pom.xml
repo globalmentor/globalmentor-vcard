@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.globalmentor</groupId>
 		<artifactId>globalmentor-parent</artifactId>
-		<version>8.2.0</version>
+		<version>8.5.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>globalmentor-vcard-parent</artifactId>
@@ -15,13 +15,17 @@
 	<name>GlobalMentor vCard Parent</name>
 	<description>GlobalMentor vCard aggregate parent POM.</description>
 	<url>http://www.globalmentor.com/software/</url>
-	<inceptionYear>1996</inceptionYear>
+	<inceptionYear>2003</inceptionYear>
 
 	<scm>
 		<connection>scm:git:https://bitbucket.org/globalmentor/globalmentor-vcard.git</connection>
 		<developerConnection>scm:git:https://bitbucket.org/globalmentor/globalmentor-vcard.git</developerConnection>
 		<url>https://bitbucket.org/globalmentor/globalmentor-vcard</url>
 	</scm>
+
+	<properties>
+		<clogr.version>0.8.0-SNAPSHOT</clogr.version>
+	</properties>
 
 	<modules>
 		<module>directory</module>
@@ -33,20 +37,14 @@
 		<dependencies>
 			<dependency>
 				<groupId>com.globalmentor</groupId>
-				<artifactId>globalmentor-core</artifactId>
-				<version>0.5.3</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-application</artifactId>
-				<version>0.5.1-SNAPSHOT</version>
+				<version>0.6.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-itu</artifactId>
-				<version>0.5.0</version>
+				<version>0.6.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
@@ -59,6 +57,18 @@
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory-vcard</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.clogr</groupId>
+				<artifactId>clogr</artifactId>
+				<version>${clogr.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.clogr</groupId>
+				<artifactId>clogr-logback-provider</artifactId>
+				<version>${clogr.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
