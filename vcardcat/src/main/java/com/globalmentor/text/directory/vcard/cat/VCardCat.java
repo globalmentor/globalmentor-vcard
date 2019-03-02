@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.globalmentor.text.directory.vcard;
+package com.globalmentor.text.directory.vcard.cat;
 
 import static com.globalmentor.application.CommandLineArguments.*;
 import static com.globalmentor.java.Characters.*;
@@ -26,6 +26,7 @@ import com.globalmentor.application.AbstractApplication;
 import com.globalmentor.io.Files;
 import com.globalmentor.lex.Identifier;
 import com.globalmentor.log.Log;
+import com.globalmentor.text.directory.vcard.*;
 
 /**
  * Application and routines for concatenating the contents of one or more VCards into a single output file.
