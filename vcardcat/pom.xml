@@ -8,25 +8,20 @@
 		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>globalmentor-text-directory-vcard</artifactId>
+	<artifactId>vcardcat</artifactId>
 
-	<name>GlobalMentor Directory vCard</name>
-	<description>GlobalMentor Java text/vcard library.</description>
+	<name>vCardCat</name>
+	<description>GlobalMentor vCard concatenation program.</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.globalmentor</groupId>
-			<artifactId>globalmentor-core</artifactId>
+			<artifactId>globalmentor-application</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.globalmentor</groupId>
-			<artifactId>globalmentor-itu</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.globalmentor</groupId>
-			<artifactId>globalmentor-text-directory</artifactId>
+			<artifactId>globalmentor-text-directory-vcard</artifactId>
 		</dependency>
 	</dependencies>
 </project>

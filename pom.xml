@@ -26,6 +26,7 @@
 	<modules>
 		<module>text-directory</module>
 		<module>text-directory-vcard</module>
+		<module>vcardcat</module>
 	</modules>
 
 	<dependencyManagement>
@@ -51,6 +52,12 @@
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.globalmentor</groupId>
+				<artifactId>globalmentor-text-directory-vcard</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
