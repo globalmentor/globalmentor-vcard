@@ -23,10 +23,6 @@
 		<url>https://bitbucket.org/globalmentor/globalmentor-vcard</url>
 	</scm>
 
-	<properties>
-		<clogr.version>0.8.0-SNAPSHOT</clogr.version>
-	</properties>
-
 	<modules>
 		<module>directory</module>
 		<module>vcard</module>
@@ -57,18 +53,6 @@
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory-vcard</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>io.clogr</groupId>
-				<artifactId>clogr</artifactId>
-				<version>${clogr.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>io.clogr</groupId>
-				<artifactId>clogr-logback-provider</artifactId>
-				<version>${clogr.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
