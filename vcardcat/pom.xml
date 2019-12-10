@@ -53,11 +53,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-exe-jar</id>
+						<phase>package</phase>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-exe</id>
+						<phase>package</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
