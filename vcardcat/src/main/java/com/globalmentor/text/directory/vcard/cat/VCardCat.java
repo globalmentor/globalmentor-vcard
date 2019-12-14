@@ -74,8 +74,7 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 						final VCard vcard = Files.read(file, vcardIO); //read this VCard
 						vcardIO.write(outputStream, null, vcard); //write the VCard to the output
 					} catch(final Throwable throwable) {
-						getLogger().error("Error processing VCard file {}.", file, throwable);
-						exit(1); //TODO improve base application to allow this to be returned
+						throw new RuntimeException(String.format("Error processing VCard file `$s`.", file), throwable);
 					}
 				}
 			} finally {
@@ -83,9 +82,8 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 					outputStream.close(); //close the file
 				}
 			}
-		} catch(final Throwable throwable) {
-			getLogger().error(throwable.getMessage(), throwable);
-			exit(1); //TODO improve base application to allow this to be returned
+		} catch(final IOException ioException) {
+			throw new UncheckedIOException(ioException.getMessage(), ioException);
 		}
 	}
 
@@ -95,4 +93,5 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 			super(VCardCat.class);
 		}
 	}
+
 }
