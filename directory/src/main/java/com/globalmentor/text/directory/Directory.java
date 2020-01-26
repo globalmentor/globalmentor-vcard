@@ -34,7 +34,7 @@ import com.globalmentor.net.ContentType;
 public class Directory {
 
 	/** The content type for directories: <code>text/directory</code>. */
-	public static final ContentType CONTENT_TYPE = ContentType.create(ContentType.TEXT_PRIMARY_TYPE, "directory");
+	public static final ContentType CONTENT_TYPE = ContentType.of(ContentType.TEXT_PRIMARY_TYPE, "directory");
 
 	/**
 	 * Whitespace as defined by RFC 2425: "space, ASCII decimal 32, or horizontal tab, ASCII decimal 9".
