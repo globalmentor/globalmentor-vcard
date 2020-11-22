@@ -26,11 +26,11 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import com.globalmentor.io.Charsets;
+import com.globalmentor.io.ClassResources;
 import com.globalmentor.io.IO;
 import com.globalmentor.iso.datetime.AbstractISODateTime;
 import com.globalmentor.iso.datetime.ISODateTime;
 import com.globalmentor.itu.TelephoneNumber;
-import com.globalmentor.java.Classes;
 import com.globalmentor.model.LocaledText;
 import com.globalmentor.text.directory.DirectorySerializer;
 
@@ -85,7 +85,7 @@ public class VCardTest {
 	@Test
 	public void testReadNokiaC301JaneDoe() throws IOException {
 		final IO<VCard> vcardIO = new VCardIO();
-		final VCard vcard = Classes.readResource(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
+		final VCard vcard = ClassResources.read(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
 		testJaneDoe(vcard);
 	}
 
@@ -93,7 +93,7 @@ public class VCardTest {
 	public void testWriteJaneDoe() throws IOException {
 		final IO<VCard> vcardIO = new VCardIO();
 		//read the card from resources
-		final VCard inputVCard = Classes.readResource(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
+		final VCard inputVCard = ClassResources.read(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		//write the card to a byte array
 		vcardIO.write(outputStream, null, inputVCard);
@@ -111,7 +111,7 @@ public class VCardTest {
 		final VCardIO vcardIO = new VCardIO();
 		vcardIO.setSerializationSingleValueNames(VCard.NOTE_TYPE); //combine notes
 		//read the card from resources
-		final VCard inputVCard = Classes.readResource(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
+		final VCard inputVCard = ClassResources.read(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
 		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		//write the card to a byte array
 		vcardIO.write(outputStream, null, inputVCard);
