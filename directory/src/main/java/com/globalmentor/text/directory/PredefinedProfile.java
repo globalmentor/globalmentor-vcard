@@ -18,6 +18,8 @@ package com.globalmentor.text.directory;
 
 import java.io.*;
 import java.net.*;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.globalmentor.io.ReaderParser.*;
@@ -26,9 +28,6 @@ import static com.globalmentor.text.directory.Directory.*;
 import static java.nio.charset.StandardCharsets.*;
 
 import com.globalmentor.io.*;
-import com.globalmentor.iso.datetime.ISODate;
-import com.globalmentor.iso.datetime.ISODateTime;
-import com.globalmentor.iso.datetime.ISOTime;
 import com.globalmentor.java.Characters;
 import com.globalmentor.model.*;
 
@@ -108,11 +107,11 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 		} else if(URI_VALUE_TYPE.equalsIgnoreCase(valueType)) { //uri
 			return new Object[] {processURIValue(reader)}; //process the URI value type			
 		} else if(DATE_VALUE_TYPE.equalsIgnoreCase(valueType)) { //date
-			return new Object[] {ISODate.valueOfLiberal(readUntilRequired(reader, CR))};
+			return new Object[] {Instant.parse(readUntilRequired(reader, CR))}; //TODO check against spec; support variations; test
 		} else if(TIME_VALUE_TYPE.equalsIgnoreCase(valueType)) { //time
-			return new Object[] {ISOTime.valueOf(readUntilRequired(reader, CR))};
+			return new Object[] {LocalTime.parse(readUntilRequired(reader, CR))}; //TODO check against spec; support variations; test
 		} else if(DATE_TIME_VALUE_TYPE.equalsIgnoreCase(valueType)) { //date-time
-			return new Object[] {ISODateTime.valueOfLiberal(readUntilRequired(reader, CR))};
+			return new Object[] {LocalTime.parse(readUntilRequired(reader, CR))}; //TODO check against spec; support variations; test
 		}
 		return null; //show that we can't create a value
 	}
@@ -184,24 +183,24 @@ public class PredefinedProfile extends AbstractProfile implements ValueFactory, 
 			delimiter = peekRequired(reader); //see what the delimiter will be
 			switch(delimiter) { //see which delimiter we found
 				case TEXT_ESCAPE_CHAR: //if this is an escape character ('\\')
-				{
-					reader.skip(1); //skip the delimiter
-					final char escapedChar = readRequired(reader); //read the character after the escape character
-					switch(escapedChar) { //see what character comes after this one
-						case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
-						case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
-							stringBuilder.append('\n'); //append a single newline character
-							break;
-						case TEXT_ESCAPE_CHAR:
-						case VALUE_SEPARATOR_CHAR:
-						case ';': //accept "\;" from VCard structured types, even though it is not mentioned in RFC 2425
-							stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
-							break;
-						default: //if something else was escaped, we don't recognize it
-							throw new ParseUnexpectedDataException(reader,
-									Characters.of('\\', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
+					{
+						reader.skip(1); //skip the delimiter
+						final char escapedChar = readRequired(reader); //read the character after the escape character
+						switch(escapedChar) { //see what character comes after this one
+							case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
+							case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
+								stringBuilder.append('\n'); //append a single newline character
+								break;
+							case TEXT_ESCAPE_CHAR:
+							case VALUE_SEPARATOR_CHAR:
+							case ';': //accept "\;" from VCard structured types, even though it is not mentioned in RFC 2425
+								stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
+								break;
+							default: //if something else was escaped, we don't recognize it
+								throw new ParseUnexpectedDataException(reader,
+										Characters.of('\\', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
+						}
 					}
-				}
 					break;
 				case VALUE_SEPARATOR_CHAR: //if this is the character separating multiple values (',')
 				case CR: //if we just peeked a carriage return
