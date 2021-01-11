@@ -16,20 +16,18 @@
 
 package com.globalmentor.text.directory.vcard;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.*;
 import java.net.URI;
+import java.time.LocalDate;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-
-import com.globalmentor.io.Charsets;
 import com.globalmentor.io.ClassResources;
 import com.globalmentor.io.IO;
-import com.globalmentor.iso.datetime.AbstractISODateTime;
-import com.globalmentor.iso.datetime.ISODateTime;
 import com.globalmentor.itu.TelephoneNumber;
 import com.globalmentor.model.LocaledText;
 import com.globalmentor.text.directory.DirectorySerializer;
@@ -45,7 +43,7 @@ public class VCardTest {
 	 * Performs tests on a VCard to ensure that it has the appropriate properties of Jane Doe.
 	 * @param vcard The VCard to test.
 	 */
-	public void testJaneDoe(final VCard vcard) {
+	private void testJaneDoe(final VCard vcard) {
 		assertThat(vcard.getName().getGivenName(), is("Jane"));
 		assertThat(vcard.getName().getFamilyName(), is("Doe"));
 		assertThat(vcard.getAddress().getExtendedAddress(), is("Oak and Pine"));
@@ -53,7 +51,7 @@ public class VCardTest {
 		assertThat(vcard.getAddress().getLocality(), is("San Francisco"));
 		assertThat(vcard.getAddress().getPostalCode(), is("94120"));
 		assertThat(vcard.getAddress().getCountryName(), is("USA"));
-		assertThat(vcard.getBirthday(), CoreMatchers.<AbstractISODateTime> is(ISODateTime.valueOf("1970-01-02T00:00:00")));
+		assertThat(vcard.getBirthday(), is(LocalDate.of(1970, 1, 2)));
 		assertThat(vcard.getFormattedName().toString(), is("Ms. Jane Lívia Doe"));
 		final Telephone homeTelephone = vcard.getTelephone(new TelephoneNumber("+14155551212"));
 		assertNotNull(homeTelephone);

@@ -18,18 +18,22 @@ package com.globalmentor.text.directory.vcard;
 
 import java.io.*;
 import java.net.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.*;
 
 import static com.globalmentor.io.ReaderParser.*;
 import static com.globalmentor.java.Characters.*;
+import static com.globalmentor.java.Conditions.*;
 import static com.globalmentor.text.ABNF.*;
 import static com.globalmentor.text.directory.Directory.*;
 import static com.globalmentor.text.directory.vcard.VCard.*;
+import static java.lang.Integer.parseInt;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 import com.globalmentor.io.*;
-import com.globalmentor.iso.datetime.AbstractISODateTime;
-import com.globalmentor.iso.datetime.ISODateTime;
 import com.globalmentor.java.*;
 import com.globalmentor.model.LocaledText;
 import com.globalmentor.model.NameValuePair;
@@ -137,7 +141,16 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 		if(N_TYPE.equalsIgnoreCase(name)) { //N
 			return new Object[] {processNValue(reader, paramList)}; //process the N value
 		} else if(BDAY_TYPE.equalsIgnoreCase(name)) { //BDAY
-			return new Object[] {AbstractISODateTime.valueOfLiberal(readUntilRequired(reader, CR))}; //a birthday should normally be a date, but sometimes it could be a date-time as well
+			final String bdayText = readUntilRequired(reader, CR); //a birthday should normally be a date, but sometimes it could be a date-time as well
+			LocalDate bday; //TODO bring back fuller date parsing, based upon VCard version
+			try {
+				bday = LocalDate.parse(bdayText);
+			} catch(final DateTimeParseException dateTimeParseException) { //if YYYY-MM-DD doesn't work, try YYYYMMDDT000000
+				checkArgument(bdayText.length() == 15 && bdayText.endsWith("T000000"),
+						format("VCard profile currently only supports `BDAY` in the `YYYY-MM-DD` or `YYYYMMDDT000000` formats; found `%s`.", bdayText));
+				bday = LocalDate.of(parseInt(bdayText.substring(0, 4)), parseInt(bdayText.substring(4, 6)), parseInt(bdayText.substring(6, 8)));
+			}
+			return new Object[] {bday};
 		}
 		//delivery addressing types
 		else if(ADR_TYPE.equalsIgnoreCase(name)) { //ADR
@@ -348,24 +361,24 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 					reader.skip(1); //skip the delimiter
 					break;
 				case TEXT_ESCAPE_CHAR: //if this is an escape character ('\\')
-				{
-					reader.skip(1); //skip the delimiter
-					final char escapedChar = readRequired(reader); //read the character after the escape character
-					switch(escapedChar) { //see what character comes after this one
-						case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
-						case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
-							stringBuilder.append('\n'); //append a single newline character
-							break;
-						case TEXT_ESCAPE_CHAR:
-						case STRUCTURED_TEXT_VALUE_DELIMITER:
-						case VALUE_SEPARATOR_CHAR:
-							stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
-							break;
-						default: //if something else was escaped, we don't recognize it
-							throw new ParseUnexpectedDataException(reader,
-									Characters.of('\\', ';', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
+					{
+						reader.skip(1); //skip the delimiter
+						final char escapedChar = readRequired(reader); //read the character after the escape character
+						switch(escapedChar) { //see what character comes after this one
+							case TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR: //"\n"
+							case TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR: //"\N"
+								stringBuilder.append('\n'); //append a single newline character
+								break;
+							case TEXT_ESCAPE_CHAR:
+							case STRUCTURED_TEXT_VALUE_DELIMITER:
+							case VALUE_SEPARATOR_CHAR:
+								stringBuilder.append(escapedChar); //escaped backslashes and commas get appended normally
+								break;
+							default: //if something else was escaped, we don't recognize it
+								throw new ParseUnexpectedDataException(reader,
+										Characters.of('\\', ';', ',', TEXT_LINE_BREAK_ESCAPED_LOWERCASE_CHAR, TEXT_LINE_BREAK_ESCAPED_UPPERCASE_CHAR), escapedChar); //show that we didn't expect this character here				
+						}
 					}
-				}
 					break;
 				case STRUCTURED_TEXT_VALUE_DELIMITER: //if this is the character separating fields in the structured text value (';')
 				case CR: //if we just peeked a carriage return
@@ -582,15 +595,9 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 				vcard.getNicknames().add((LocaledText)contentLine.getValue()); //add this nickname to our list
 				continue; //don't process this content line further
 			} else if(BDAY_TYPE.equalsIgnoreCase(typeName)) { //BDAY
-				AbstractISODateTime bday = (AbstractISODateTime)contentLine.getValue();
-				//if a date and time were given, make sure it's not something that could be represented by just a date
+				final Temporal bday = (Temporal)contentLine.getValue();
+				//TODO if a date and time were given, make sure it's not something that could be represented by just a date
 				//(Google, for instance, doesn't recognize birthdays composed of both date and time)
-				if(bday instanceof ISODateTime) {
-					final ISODateTime bdayDateTime = (ISODateTime)bday;
-					if(bdayDateTime.isMidnight() && bdayDateTime.getISOTime().getUTCOffset() == null) { //if this date and time is midnight with no UTC offset specified
-						bday = bdayDateTime.toISODate(); //the time is superfluous; only use the date
-					}
-				}
 				vcard.setBirthday(bday); //set the birthday
 				continue; //don't process this content line further
 			}
