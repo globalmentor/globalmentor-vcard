@@ -24,7 +24,7 @@ import com.globalmentor.java.Characters;
 import com.globalmentor.java.Objects;
 import com.globalmentor.java.StringBuilders;
 import com.globalmentor.model.*;
-import com.globalmentor.net.ContentType;
+import com.globalmentor.net.MediaType;
 
 /**
  * A directory of type <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type for Directory
@@ -34,7 +34,7 @@ import com.globalmentor.net.ContentType;
 public class Directory {
 
 	/** The media type for directories: <code>text/directory</code>. */
-	public static final ContentType MEDIA_TYPE = ContentType.of(ContentType.TEXT_PRIMARY_TYPE, "directory");
+	public static final MediaType MEDIA_TYPE = MediaType.of(MediaType.TEXT_PRIMARY_TYPE, "directory");
 
 	/**
 	 * Whitespace as defined by RFC 2425: "space, ASCII decimal 32, or horizontal tab, ASCII decimal 9".
