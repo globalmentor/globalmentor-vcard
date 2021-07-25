@@ -35,7 +35,7 @@ import picocli.CommandLine.*;
  * </p>
  * @author Garret Wilson
  */
-@Command(name = "vcardcat", description = "Concatenates the contents of one or more vCards into a single output.", versionProvider = VCardCat.MetadataProvider.class, mixinStandardHelpOptions = true)
+@Command(name = "vcardcat", description = "Concatenates the contents of one or more vCards into a single output.")
 public class VCardCat extends BaseCliApplication implements Clogged {
 
 	@Option(names = {"--out", "-o"})
@@ -84,13 +84,6 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 			}
 		} catch(final IOException ioException) {
 			throw new UncheckedIOException(ioException.getMessage(), ioException);
-		}
-	}
-
-	/** Strategy for providing version and other information from the configuration. */
-	static class MetadataProvider extends AbstractMetadataProvider {
-		public MetadataProvider() {
-			super(VCardCat.class);
 		}
 	}
 
