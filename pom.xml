@@ -12,7 +12,7 @@
 	<version>0.6.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>GlobalMentor vCard Parent</name>
+	<name>GlobalMentor vCard</name>
 	<description>GlobalMentor vCard aggregate parent POM and bill of materials.</description>
 	<url>http://www.globalmentor.com/software/</url>
 	<inceptionYear>2003</inceptionYear>
