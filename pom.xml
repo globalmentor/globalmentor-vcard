@@ -8,14 +8,22 @@
 		<version>8.6.0</version>
 	</parent>
 
-	<artifactId>globalmentor-vcard-parent</artifactId>
+	<artifactId>globalmentor-vcard</artifactId>
 	<version>0.6.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>GlobalMentor vCard Parent</name>
-	<description>GlobalMentor vCard aggregate parent POM.</description>
+	<description>GlobalMentor vCard aggregate parent POM and bill of materials.</description>
 	<url>http://www.globalmentor.com/software/</url>
 	<inceptionYear>2003</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>Apache-2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<scm>
 		<connection>scm:git:https://bitbucket.org/globalmentor/globalmentor-vcard.git</connection>
@@ -52,6 +60,12 @@
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory-vcard</artifactId>
+				<version>0.6.3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.globalmentor</groupId>
+				<artifactId>vcardcat</artifactId>
 				<version>0.6.3-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
