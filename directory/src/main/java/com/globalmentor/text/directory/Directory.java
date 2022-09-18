@@ -21,7 +21,6 @@ import static com.globalmentor.text.ABNF.*;
 import java.util.*;
 
 import com.globalmentor.java.Characters;
-import com.globalmentor.java.Objects;
 import com.globalmentor.java.StringBuilders;
 import com.globalmentor.model.*;
 import com.globalmentor.net.MediaType;
