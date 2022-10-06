@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>globalmentor-vcard</artifactId>
-	<version>0.6.3-SNAPSHOT</version>
+	<version>0.6.3</version>
 	<packaging>pom</packaging>
 
 	<name>GlobalMentor vCard Parent BOM</name>
@@ -54,19 +54,19 @@
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory</artifactId>
-				<version>0.6.3-SNAPSHOT</version>
+				<version>0.6.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-text-directory-vcard</artifactId>
-				<version>0.6.3-SNAPSHOT</version>
+				<version>0.6.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>vcardcat</artifactId>
-				<version>0.6.3-SNAPSHOT</version>
+				<version>0.6.3</version>
 			</dependency>
 
 			<dependency>
