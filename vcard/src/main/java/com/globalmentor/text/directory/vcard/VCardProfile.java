@@ -789,6 +789,6 @@ public class VCardProfile extends AbstractProfile implements ValueFactory, Value
 		}
 		contentLineList.addAll(vcard.getContentLineList()); //add all of our unrecognized content lines
 		contentLineList.add(new ContentLine(END_TYPE, new LocaledText(VCARD_PROFILE_NAME))); //END:VCARD
-		return (ContentLine[])contentLineList.toArray(new ContentLine[contentLineList.size()]); //return the content lines we produced	
+		return contentLineList.toArray(new ContentLine[contentLineList.size()]); //return the content lines we produced	
 	}
 }

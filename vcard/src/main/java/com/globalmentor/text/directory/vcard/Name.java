@@ -274,20 +274,25 @@ public class Name extends DefaultLocaleable {
 	public String toString() {
 		try {
 			final StringBuilder stringBuilder = new StringBuilder(); //create a new string builder to hold the string we'll construct
-			formatList(stringBuilder, ',', honorificPrefixes); //append the honorific prefixes, separated by a comma
-			if(honorificPrefixes.length > 0 && (givenNames.length > 0 || additionalNames.length > 0 || familyNames.length > 0 || honorificSuffixes.length > 0)) //if we added information and there is more information following
+			formatList(stringBuilder, ',', (Object[])honorificPrefixes); //append the honorific prefixes, separated by a comma
+			if(honorificPrefixes.length > 0 && (givenNames.length > 0 || additionalNames.length > 0 || familyNames.length > 0 || honorificSuffixes.length > 0)) { //if we added information and there is more information following
 				stringBuilder.append(' '); //append a space
-			formatList(stringBuilder, '/', givenNames); //append the given names, separated by a slash
-			if(givenNames.length > 0 && (additionalNames.length > 0 || familyNames.length > 0 || honorificSuffixes.length > 0)) //if we added information and there is more information following
+			}
+			formatList(stringBuilder, '/', (Object[])givenNames); //append the given names, separated by a slash
+			if(givenNames.length > 0 && (additionalNames.length > 0 || familyNames.length > 0 || honorificSuffixes.length > 0)) { //if we added information and there is more information following
 				stringBuilder.append(' '); //append a space
+			}
 			formatList(stringBuilder, ", ", (Object[])additionalNames); //append the additional names, separated by a comma
-			if(additionalNames.length > 0 && (familyNames.length > 0 || honorificSuffixes.length > 0)) //if we added information and there is more information following
+			if(additionalNames.length > 0 && (familyNames.length > 0 || honorificSuffixes.length > 0)) { //if we added information and there is more information following
 				stringBuilder.append(' '); //append a space
-			formatList(stringBuilder, '/', familyNames); //append the family names, separated by a slash
-			if(stringBuilder.length() > 0 && honorificSuffixes.length > 0) //if we have any content before the suffixes, and there are suffixes
+			}
+			formatList(stringBuilder, '/', (Object[])familyNames); //append the family names, separated by a slash
+			if(stringBuilder.length() > 0 && honorificSuffixes.length > 0) { //if we have any content before the suffixes, and there are suffixes
 				stringBuilder.append(','); //add a comma before the suffixes
-			if(familyNames.length > 0 && (honorificSuffixes.length > 0)) //if we added information and there is more information following
+			}
+			if(familyNames.length > 0 && (honorificSuffixes.length > 0)) { //if we added information and there is more information following
 				stringBuilder.append(' '); //append a space
+			}
 			formatList(stringBuilder, ", ", (Object[])honorificSuffixes); //append the honorific suffixes, separated by a comma
 			return stringBuilder.toString(); //return the string we constructed
 		} catch(final IOException ioException) {

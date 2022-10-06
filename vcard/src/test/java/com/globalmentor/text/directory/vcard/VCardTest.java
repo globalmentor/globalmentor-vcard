@@ -81,6 +81,7 @@ public class VCardTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testReadNokiaC301JaneDoe() throws IOException {
 		final IO<VCard> vcardIO = new VCardIO();
 		final VCard vcard = ClassResources.read(getClass(), "nokia-c3-01-janedoe.vcf", vcardIO);
@@ -88,6 +89,7 @@ public class VCardTest {
 	}
 
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testWriteJaneDoe() throws IOException {
 		final IO<VCard> vcardIO = new VCardIO();
 		//read the card from resources
@@ -105,6 +107,7 @@ public class VCardTest {
 
 	/** Tests the ability to combine NOTEs when serializing, for consumers such as GMail that don't allow multiple notes. */
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testWriteJaneDoeCombineNotes() throws IOException {
 		final VCardIO vcardIO = new VCardIO();
 		vcardIO.setSerializationSingleValueNames(VCard.NOTE_TYPE); //combine notes

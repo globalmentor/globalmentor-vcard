@@ -147,7 +147,7 @@ public class DirectoryProcessor {
 	 */
 	protected String popProfile() {
 		useDefaultProfile = false; //suspend use of the default profile
-		return (String)profileStack.removeLast(); //pop the profile from the stack
+		return profileStack.removeLast(); //pop the profile from the stack
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class DirectoryProcessor {
 		profileStack = null; //release the profile stack
 		defaultProfile = null; //show that there is no default profile
 		useDefaultProfile = false; //don't use the default profile
-		return (ContentLine[])contentLineList.toArray(new ContentLine[contentLineList.size()]); //return the content lines we processed				
+		return contentLineList.toArray(new ContentLine[contentLineList.size()]); //return the content lines we processed				
 	}
 
 	/**

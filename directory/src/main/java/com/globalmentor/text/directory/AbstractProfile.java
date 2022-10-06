@@ -45,7 +45,7 @@ public abstract class AbstractProfile implements Profile {
 	 * @return The value type associated with this type name, or <code>null</code> if no value type has been registered with the type name.
 	 */
 	protected String getValueType(final String typeName) {
-		return (String)typeNameValueTypeMap.get(typeName.toLowerCase()); //get whatever value type we have associated with this type name, if any
+		return typeNameValueTypeMap.get(typeName.toLowerCase()); //get whatever value type we have associated with this type name, if any
 	}
 
 	/**

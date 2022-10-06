@@ -29,8 +29,8 @@ import static java.nio.charset.StandardCharsets.*;
 import static java.util.Collections.*;
 
 /**
- * Class for loading and saving a a vCard <code>text/directory</code> profile as defined in <a href="http://www.ietf.org/rfc/rfc2426.txt">RFC 2426</a>,
- * "vCard MIME Directory Profile".
+ * Class for loading and saving a a vCard <code>text/directory</code> profile as defined in <a href="http://www.ietf.org/rfc/rfc2426.txt">RFC 2426</a>, "vCard
+ * MIME Directory Profile".
  * @author Garret Wilson
  * @see VCard
  */
@@ -64,6 +64,7 @@ public class VCardIO implements IO<VCard> {
 	protected static final VCardProfile VCARD_PROFILE = new VCardProfile();
 
 	/** {@inheritDoc} */
+	@Override
 	public VCard read(final InputStream inputStream, final URI baseURI) throws IOException {
 		final DirectoryProcessor directoryProcessor = new DirectoryProcessor(); //create a new directory processor
 		directoryProcessor.registerProfile(VCARD_PROFILE_NAME, VCARD_PROFILE); //register the vCard profile with the vCard processor
@@ -77,6 +78,7 @@ public class VCardIO implements IO<VCard> {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	public void write(final OutputStream outputStream, final URI baseURI, final VCard object) throws IOException {
 		final ContentLine[] contentLines = VCardProfile.createContentLines(object); //create content lines from the vCard
 		final DirectorySerializer directorySerializer = new DirectorySerializer(); //create a new directory serializer

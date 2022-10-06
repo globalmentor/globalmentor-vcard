@@ -176,7 +176,7 @@ public class DirectorySerializer {
 	 */
 	protected String popProfile() {
 		useDefaultProfile = false; //suspend use of the default profile
-		return (String)profileStack.removeLast(); //pop the profile from the stack
+		return profileStack.removeLast(); //pop the profile from the stack
 	}
 
 	/**
