@@ -1,11 +1,11 @@
 /*
- * Copyright © 1996-2011 GlobalMentor, Inc. <http://www.globalmentor.com/>
+ * Copyright © 1996-2011 GlobalMentor, Inc. <https://www.globalmentor.com/>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,7 @@ import com.globalmentor.java.Characters;
 import com.globalmentor.model.*;
 
 /**
- * Profile for predefined types of a <code>text/directory</code> as defined in <a href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type
+ * Profile for predefined types of a <code>text/directory</code> as defined in <a href="https://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type
  * for Directory Information".
  * <p>
  * The predefined profile knows how to process the standard directory value types: {@value Directory#URI_VALUE_TYPE}, {@value Directory#TEXT_VALUE_TYPE},

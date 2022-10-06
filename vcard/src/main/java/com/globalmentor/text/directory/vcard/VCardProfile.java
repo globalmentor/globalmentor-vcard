@@ -1,11 +1,11 @@
 /*
- * Copyright © 1996-2008 GlobalMentor, Inc. <http://www.globalmentor.com/>
+ * Copyright © 1996-2008 GlobalMentor, Inc. <https://www.globalmentor.com/>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,7 @@ import com.globalmentor.text.ArgumentSyntaxException;
 import com.globalmentor.text.directory.*;
 
 /**
- * Class that can create values for the "VCARD" profile of a <code>text/directory</code>as defined in <a href="http://www.ietf.org/rfc/rfc2426.txt">RFC
+ * Class that can create values for the "VCARD" profile of a <code>text/directory</code>as defined in <a href="https://www.ietf.org/rfc/rfc2426.txt">RFC
  * 2426</a>, "vCard MIME Directory Profile".
  * <p>
  * The processor knows how to process the vCard types: <code>BINARY_VALUE_TYPE</code>, <code>VCARD_VALUE_TYPE</code>, <code>PHONE_NUMBER_VALUE_TYPE</code>, and

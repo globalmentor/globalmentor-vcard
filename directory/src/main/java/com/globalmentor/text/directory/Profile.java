@@ -1,11 +1,11 @@
 /*
- * Copyright © 1996-2011 GlobalMentor, Inc. <http://www.globalmentor.com/>
+ * Copyright © 1996-2011 GlobalMentor, Inc. <https://www.globalmentor.com/>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,7 @@ import com.globalmentor.model.NameValuePair;
 
 /**
  * Class that knows how to give profile-specific information for types within a profile of a <code>text/directory</code> as defined in <a
- * href="http://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type for Directory Information".
+ * href="https://www.ietf.org/rfc/rfc2425.txt">RFC 2425</a>, "A MIME Content-Type for Directory Information".
  * <p>
  * A profile may return <code>null</code> from {@link #getValueType(String, String, String, List)}) if if it wishes to do custom creation in
  * {@link ValueFactory#createValues(String, String, String, List, String, java.io.Reader)}, providing it has been registered with the particular type
