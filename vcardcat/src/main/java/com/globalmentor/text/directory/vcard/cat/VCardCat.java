@@ -16,9 +16,15 @@
 
 package com.globalmentor.text.directory.vcard.cat;
 
+import static java.lang.String.*;
+import static java.util.stream.Collectors.*;
+
 import java.io.*;
+import java.util.List;
 
 import javax.annotation.*;
+
+import org.slf4j.event.Level;
 
 import com.globalmentor.application.*;
 import com.globalmentor.io.Files;
@@ -42,14 +48,14 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 	private File outputFile;
 
 	@Parameters(paramLabel = "<file>", description = "One or more input files, or a single file glob.", arity = "1..*")
-	private File[] inputFiles;
+	private List<File> inputFiles;
 
 	/**
 	 * Constructor.
 	 * @param args The command line arguments.
 	 */
 	public VCardCat(@Nonnull final String[] args) {
-		super(args);
+		super(args, Level.INFO);
 	}
 
 	/**
@@ -62,19 +68,21 @@ public class VCardCat extends BaseCliApplication implements Clogged {
 
 	@Override
 	public void run() {
+		logAppInfo();
+
 		try {
+			final List<File> files = inputFiles.stream().map(File::getAbsoluteFile).collect(toUnmodifiableList()); //TODO switch to `Path.toRealPath(NOFOLLOW_LINKS)`
 			final OutputStream outputStream = outputFile != null ? new BufferedOutputStream(new FileOutputStream(outputFile)) : System.out;
 			try {
 				final VCardIO vcardIO = new VCardIO();
 				vcardIO.setSerializationSingleValueNames(VCard.NOTE_TYPE); //combine notes TODO make this optional
-				final File[] files = inputFiles.length == 1 ? Files.listWildcards(inputFiles[0]) : inputFiles;
 				for(final File file : files) { //look at all the specified files
 					try {
 						//read the card from resources
 						final VCard vcard = Files.read(file, vcardIO); //read this VCard
 						vcardIO.write(outputStream, null, vcard); //write the VCard to the output
 					} catch(final Throwable throwable) {
-						throw new RuntimeException(String.format("Error processing VCard file `$s`.", file), throwable);
+						throw new RuntimeException(format("Error processing VCard file `%s`: %s.", file, throwable.getMessage()), throwable);
 					}
 				}
 			} finally {
